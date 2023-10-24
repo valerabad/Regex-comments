@@ -46,16 +46,16 @@ namespace Regex_comments
             return result;
         }
 
-        public static void WriteProcessLog(ChainAndShoppingCenterLogItem item)
+        public static void WriteProcessLog(string comment, ChainAndShoppingCenterLogItem item)
         {
             string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
 
                 // Append text to an existing file named "WriteLines.txt".
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ClearExtraLogs.txt"), true))
-            {
-                outputFile.WriteLine($"{item.RowId} {item.UserName} {item.ChainId} {item.ShoppingCenterId} {item.OrgId}");
-            }
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ClearExtraLogs2.txt"), true))
+                {
+                    outputFile.WriteLine($"{comment} {item?.RowId} {item?.UserName} {item?.ChainId} {item?.ShoppingCenterId} {item?.OrgId}");
+                }
         }
     }
 }
