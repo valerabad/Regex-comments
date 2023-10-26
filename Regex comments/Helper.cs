@@ -52,7 +52,7 @@ namespace Regex_comments
 
 
                 // Append text to an existing file named "WriteLines.txt".
-                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ClearExtraLogs2.txt"), true))
+                using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ClearExtraLogs.txt"), true))
                 {
                     outputFile.WriteLine($"{comment} {item?.RowId} {item?.UserName} {item?.ChainId} {item?.ShoppingCenterId} {item?.OrgId}");
                 }
