@@ -57,5 +57,41 @@ namespace Regex_comments
                     outputFile.WriteLine($"{comment} {item?.RowId} {item?.UserName} {item?.ChainId} {item?.ShoppingCenterId} {item?.OrgId}");
                 }
         }
+
+        public static void WriteProcessLog_NotMatched_ToSave(ChainAndShoppingCenterLogItem item)
+        {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+
+            // Append text to an existing file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ActionLog_NOT_MATCHED.txt"), true))
+            {
+                outputFile.WriteLine($"'{item?.RowId}',");
+            }
+        }
+
+        public static void WriteProcessLog_DifferentBEFORE_LastWord_ToSave(ChainAndShoppingCenterLogItem item)
+        {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+
+            // Append text to an existing file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ActionLog_DIFFERENT_BEFORE_LastWord.txt"), true))
+            {
+                outputFile.WriteLine($"'{item?.RowId}',");
+            }
+        }
+
+        public static void WriteProcessLog_DifferentBEFORE_3_EmptyStrings(ChainAndShoppingCenterLogItem item)
+        {
+            string docPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+
+            // Append text to an existing file named "WriteLines.txt".
+            using (StreamWriter outputFile = new StreamWriter(Path.Combine(docPath, "ActionLog_DIFFERENT_BEFORE_3_EmptyStrings.txt"), true))
+            {
+                outputFile.WriteLine($"'{item?.RowId}',");
+            }
+        }
     }
 }

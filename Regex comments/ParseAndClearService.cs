@@ -35,10 +35,27 @@ namespace Regex_comments
                             StringBuilder stringBuilder = new StringBuilder();
                             stringBuilder.Append(text);
                             int index = text.IndexOf(line);
-                            stringBuilder.Replace(line + "\r\n", String.Empty, index, line.Length + 2);
+                            //line = line + "\r\n";
+                            try
+                            {
+                                stringBuilder.Replace(line + "\r\n", String.Empty, index, line.Length + 2);
+                                text = stringBuilder.ToString();
+                                flag = true;
+                            }
+                            catch (ArgumentOutOfRangeException ex)
+                            {
+                                stringBuilder.Replace(line, String.Empty, index, line.Length);
+                                text = stringBuilder.ToString();
+                                flag = true;
 
-                            text = stringBuilder.ToString();
-                            flag = true;
+                                Helper.WriteProcessLog("Single line is updated with exception: ", item);
+
+                            }
+                            catch (Exception ex)
+                            {
+                                Helper.WriteProcessLog($"Exception {ex} in item: ", item);
+                            }
+ 
                         }
                     }
                 }
@@ -79,11 +96,11 @@ namespace Regex_comments
                         (string field, (string old, string new_) values) row =
                             (field: match2.Groups[1].Value, (old: match2.Groups[2].Value, match2.Groups[3].Value));
 
-                        var old = match2.Groups[2].Value.Replace("⋆", "\r\n").Trim();
-                        var new_ = match2.Groups[3].Value.Replace("⋆", "\r\n").Trim();
+                        var old = match2.Groups[2].Value.Trim();
+                        var new_ = match2.Groups[3].Value.Trim();
                         if (old == new_)
                         {
-                            text = text.Replace("⋆", "\r\n");
+                            //text = text.Replace("⋆", "\r\n");
 
                             var str = match2.Groups[0].Value.Replace("⋆", "\r\n");
                             text = text.Replace(str, "\r\n\r\n\r\n");
@@ -93,7 +110,8 @@ namespace Regex_comments
                         else
                         {
                             //text = text.Replace("⋆", "\r\n");
-                            //Helper.WriteProcessLog("Alert - Multiline description is NOT UPDATED: ", item);
+                            Helper.WriteProcessLog("Multiline is not updated before 3 EmptyStrings - DIFFERENT: ", item);
+                            Helper.WriteProcessLog_DifferentBEFORE_3_EmptyStrings(item);
                         }
                     }
                     else
@@ -107,8 +125,8 @@ namespace Regex_comments
                             (string field, (string old, string new_) values) row =
                                 (field: match4.Groups[1].Value, (old: match4.Groups[2].Value, match4.Groups[3].Value));
 
-                            var old = match4.Groups[2].Value.Replace("⋆", "\r\n").Trim();
-                            var new_ = match4.Groups[3].Value.Replace("⋆", "\r\n").Trim();
+                            var old = match4.Groups[2].Value.Trim();
+                            var new_ = match4.Groups[3].Value.Trim();
                             if (old == new_)
                             {
 
@@ -118,7 +136,7 @@ namespace Regex_comments
                             }
                             else
                             {
-                                Regex regex5 = new Regex(@"(^(DescriptionLong|CommonDescription|Description|CommonDescriptionShort|DescriptionShort|ShortDescription)\s-\sold:\s(.*),\snew:\s?(.*))ShortDescription\s{1}-\s{1}old:", RegexOptions.Multiline | RegexOptions.Singleline);
+                                Regex regex5 = new Regex(@"^(DescriptionLong|CommonDescription|Description|CommonDescriptionShort|DescriptionShort|ShortDescription)\s-\sold:\s(.*),\snew:\s?(.*)(ShortDescription)\s{1}-\s{1}old:", RegexOptions.Multiline | RegexOptions.Singleline);
                                 MatchCollection matches5 = regex5.Matches(text);
                                 var match5 = matches5.FirstOrDefault();
 
@@ -127,27 +145,34 @@ namespace Regex_comments
                                     (string field, (string old, string new_) values) row5 =
                                         (field: match5.Groups[1].Value, (old: match5.Groups[2].Value, match5.Groups[3].Value));
 
-                                    var old5 = match5.Groups[3].Value.Replace("⋆", "\r\n").Trim();
-                                    var new_5 = match5.Groups[4].Value.Replace("⋆", "\r\n").Trim();
+                                    var old5 = match5.Groups[3].Value.Trim();
+                                    var new_5 = match5.Groups[4].Value.Trim();
 
                                     if(old5 == new_5)
                                     {
 
                                         text = text.Replace(match5.Groups[1].Value, String.Empty);
 
-                                        Helper.WriteProcessLog("Multiline is updated 2 - before ShortDescription: ", item);
+                                        Helper.WriteProcessLog("Multiline is updated 2 - before LastfieldName: ", item);
+                                    }
+                                    else
+                                    {
+                                        Helper.WriteProcessLog("Multiline is not updated 2 - before LastfieldName - DIFFERENT: ", item);
+                                        Helper.WriteProcessLog_DifferentBEFORE_LastWord_ToSave(item);
                                     }
                                 }
                                 else
                                 {
-                                    Helper.WriteProcessLog("Alert Multiline is not matched 0: ", item);
+                                    Helper.WriteProcessLog("Alert - Multiline is not matched or description fields are different: ", item);
+                                    Helper.WriteProcessLog_NotMatched_ToSave(item);
                                 }
                             }
 
                         } 
                         else
                         {
-                            Helper.WriteProcessLog("Alert - Multiline is not matched: 1", item);
+                            Helper.WriteProcessLog("Alert2 - Multiline is not MATCHED", item);
+                            Helper.WriteProcessLog_NotMatched_ToSave(item);
                         }
 
                         //Helper.WriteProcessLog("Alert - Multiline is not matched: ", item);
